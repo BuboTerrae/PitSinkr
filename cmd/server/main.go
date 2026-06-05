@@ -2,10 +2,10 @@ package main
 
 import (
 	"log"
-	"pitsinkr/internals/dns"
-	"pitsinkr/internals/storage"
-	"pitsinkr/internals/web"
-	"server/api"
+	"pitsinkr/internal/dns"
+	"pitsinkr/internal/storage"
+	"pitsinkr/internal/web"
+	"pitsinkr/cmd/server/api"
 )
 
 func main() {

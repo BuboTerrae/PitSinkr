@@ -2,7 +2,7 @@ package api
 
 import (
 	"database/sql"
-	"pitsinkr/internals/storage"
+	"pitsinkr/internal/storage"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net"
-	"pitsinkr/internals/storage"
+	"pitsinkr/internal/storage"
 	"time"
 
 	"github.com/miekg/dns"
