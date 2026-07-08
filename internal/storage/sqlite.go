@@ -9,11 +9,17 @@ import (
 )
 
 type DNSLog struct {
-	ID        int64     `json:"id"`
-	ClientIP  string    `json:"client_ip"`
-	Domain    string    `json:"domain"`
-	Type      string    `json:"query_type"`
-	Timestamp time.Time `json:"timestamp"`
+	ID         int64     `json:"id"`
+	ClientIP   string    `json:"client_ip"`
+	ClientPort string    `json:"client_port"`
+	Domain     string    `json:"domain"`
+	Type       string    `json:"query_type"`
+	Blocked    bool      `json:"blocked"`
+	Reason     string    `json:"reason"`
+	ResponseIP string    `json:"response_ip"`
+	QueryID    uint16    `json:"query_id"`
+	RawQuery   []byte    `json:"raw_query"`
+	Timestamp  time.Time `json:"timestamp"`
 }
 
 func OpenDB() (*sql.DB, error) {
@@ -22,13 +28,26 @@ func OpenDB() (*sql.DB, error) {
 
 func InitDB(db *sql.DB) error {
 	query := `CREATE TABLE IF NOT EXISTS dns_logs(
-	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	client_ip TEXT NOT NULL,
-	domain TEXT NOT NULL,
-	query_type TEXT NOT NULL,
-	timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
-	)`
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		client_ip TEXT NOT NULL,
+		domain TEXT NOT NULL,
+		query_type TEXT NOT NULL,
+		timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+	);`
 	// query:=`DROP TABLE dns_logs`
+
+	_, err := db.Exec(query)
+
+	return err
+}
+
+func initBlocklist(db *sql.DB) error {
+	query := `CREATE IF NOT EXISTS blocklist(
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		domain TEXT NOT NULL UNIQUE,
+		enabled BOOLEAN NOT NULL DEFAULT 1,
+		created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+	);`
 
 	_, err := db.Exec(query)
 

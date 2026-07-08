@@ -2,10 +2,13 @@ services:
   pitsinkr:
     build: .
     container_name: pitsinkr
+    network_mode: host
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
     ports:
       - "53:53/udp"
+      - "53:53/tcp"
       - "4004:4004"
       - "9056:9056"
-    volumes:
-      - pitsinkr_data:/app/data
     restart: unless-stopped
